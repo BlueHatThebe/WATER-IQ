@@ -27,7 +27,9 @@ class Book:
         """
         if self.is_available:
             self.is_available = False
+            print(f"\nBook '{self.book_title}' has been marked as borrowed.\n")
             return True
+        print(f"\nBook '{self.book_title}' is not available for borrowing.\n")
         return False
     
     def return_book(self):
@@ -38,18 +40,20 @@ class Book:
         """
         if not self.is_available:
             self.is_available = True
+            print(f"\nBook '{self.book_title}' has been marked as returned.\n")
             return True
+        print(f"\nBook '{self.book_title}' is already available.\n")
         return False
     
     def display_details(self):
         """
         Print book details including title, author, and availability.
         """
-        print(f"Book Title: {self.book_title}")
+        print(f"\nBook Title: {self.book_title}")
         print(f"Author: {self.author}")
         print(f"Book ID: {self.book_id}")
         print(f"Available: {'Yes' if self.is_available else 'No'}")
-        print("-" * 30)
+        print("-" * 30 + "\n")
 
 
 class Member:
@@ -75,7 +79,9 @@ class Member:
         
         :param book_id: ID of the book to be borrowed
         """
-        self.borrowed_books.append(str(book_id).strip())
+        book_id = str(book_id).strip()
+        self.borrowed_books.append(book_id)
+        print(f"\nBook ID {book_id} added to {self.member_name}'s borrowed list.\n")
     
     def return_book(self, book_id):
         """
@@ -87,19 +93,22 @@ class Member:
         book_id = str(book_id).strip()
         if book_id in self.borrowed_books:
             self.borrowed_books.remove(book_id)
+            print(f"\nBook ID {book_id} removed from {self.member_name}'s borrowed list.\n")
             return True
+        print(f"\nBook ID {book_id} not found in {self.member_name}'s borrowed list.\n")
         return False
     
     def display_borrowed_books(self):
         """
         Display all books borrowed by the member.
         """
+        print(f"\nBooks borrowed by {self.member_name}:")
         if not self.borrowed_books:
-            print(f"{self.member_name} has no borrowed books.")
+            print("No borrowed books.\n")
         else:
-            print(f"Books borrowed by {self.member_name}:")
             for book_id in self.borrowed_books:
                 print(f"- Book ID: {book_id}")
+            print()
 
 
 class Library:
@@ -113,8 +122,8 @@ class Library:
             raise ValueError("Library name cannot be empty.")
         
         self.name = name.strip()
-        self.books = {}    #  create empty dictionary to contain books
-        self.members = {}  #  create empty dictionary to contain members
+        self.books = {}
+        self.members = {}
     
     def add_book(self, book_title, author, book_id):
         """
@@ -125,36 +134,32 @@ class Library:
         :param book_id: Unique identifier for the book
         :return: True if book was added, False if book ID already exists
         """
-        # Validate input
         try:
             book_id = str(book_id).strip()
             
-            # Check for empty or whitespace-only inputs
             if not book_title or not book_title.strip():
-                print("Error: Book title cannot be empty.")
+                print("\nError: Book title cannot be empty.\n")
                 return False
             
             if not author or not author.strip():
-                print("Error: Author name cannot be empty.")
+                print("\nError: Author name cannot be empty.\n")
                 return False
             
             if not book_id:
-                print("Error: Book ID cannot be empty.")
+                print("\nError: Book ID cannot be empty.\n")
                 return False
         
-            # Check for duplicate book ID
             if book_id in self.books:
-                print(f"Error: Book with ID {book_id} already exists in the library.")
+                print(f"\nError: Book with ID {book_id} already exists in the library.\n")
                 return False
             
-            # Create and add the book
             new_book = Book(book_title, author, book_id)
             self.books[book_id] = new_book
-            print(f"Book '{book_title}' added successfully.")
+            print(f"\nBook '{book_title}' added successfully to {self.name}.\n")
             return True
         
         except ValueError as e:
-            print(f"Error adding book: {e}")
+            print(f"\nError adding book: {e}\n")
             return False
     
     def register_member(self, member_name, member_id):
@@ -168,28 +173,25 @@ class Library:
         try:
             member_id = str(member_id).strip()
             
-            # Check for empty or whitespace-only inputs
             if not member_name or not member_name.strip():
-                print("Error: Member name cannot be empty.")
+                print("\nError: Member name cannot be empty.\n")
                 return False
             
             if not member_id:
-                print("Error: Member ID cannot be empty.")
+                print("\nError: Member ID cannot be empty.\n")
                 return False
             
-            # Check for duplicate member ID
             if member_id in self.members:
-                print(f"Error: Member with ID {member_id} already exists.")
+                print(f"\nError: Member with ID {member_id} already exists.\n")
                 return False
             
-            # Create and register the member
             new_member = Member(member_name, member_id)
             self.members[member_id] = new_member
-            print(f"Member '{member_name}' registered successfully.")
+            print(f"\nMember '{member_name}' registered successfully in {self.name}.\n")
             return True
         
         except ValueError as e:
-            print(f"Error registering member: {e}")
+            print(f"\nError registering member: {e}\n")
             return False
     
     def borrow_book(self, member_id, book_id):
@@ -201,43 +203,39 @@ class Library:
         :return: True if book was borrowed successfully, False otherwise
         """
         try:
-            # Normalize and validate input
             member_id = str(member_id).strip()
             book_id = str(book_id).strip()
             
-            # Check if member exists
             if not member_id:
-                print("Error: Member ID cannot be empty.")
+                print("\nError: Member ID cannot be empty.\n")
                 return False
             
             if member_id not in self.members:
-                print(f"Error: Member with ID {member_id} not found.")
+                print(f"\nError: Member with ID {member_id} not found.\n")
                 return False
             
-            # Check if book exists
             if not book_id:
-                print("Error: Book ID cannot be empty.")
+                print("\nError: Book ID cannot be empty.\n")
                 return False
             
             if book_id not in self.books:
-                print(f"Error: Book with ID {book_id} not found.")
+                print(f"\nError: Book with ID {book_id} not found.\n")
                 return False
             
-            # Proceed with borrowing
             book = self.books[book_id]
             member = self.members[member_id]
             
             if book.is_available:
                 book.borrow()
                 member.borrow_book(book_id)
-                print(f"Book '{book.book_title}' borrowed successfully by {member.member_name}.")
+                print(f"\nBook '{book.book_title}' borrowed successfully by {member.member_name}.\n")
                 return True
             else:
-                print(f"Error: Book '{book.book_title}' is currently unavailable.")
+                print(f"\nError: Book '{book.book_title}' is currently unavailable.\n")
                 return False
         
         except Exception as e:
-            print(f"Unexpected error while borrowing book: {e}")
+            print(f"\nUnexpected error while borrowing book: {e}\n")
             return False
     
     def return_book(self, member_id, book_id):
@@ -249,59 +247,52 @@ class Library:
         :return: True if book was returned successfully, False otherwise
         """
         try:
-            # Normalize and validate input
             member_id = str(member_id).strip()
             book_id = str(book_id).strip()
             
-            # Check if member exists
             if not member_id:
-                print("Error: Member ID cannot be empty.")
+                print("\nError: Member ID cannot be empty.\n")
                 return False
             
             if member_id not in self.members:
-                print(f"Error: Member with ID {member_id} not found.")
+                print(f"\nError: Member with ID {member_id} not found.\n")
                 return False
             
-            # Check if book exists
             if not book_id:
-                print("Error: Book ID cannot be empty.")
+                print("\nError: Book ID cannot be empty.\n")
                 return False
             
             if book_id not in self.books:
-                print(f"Error: Book with ID {book_id} not found.")
+                print(f"\nError: Book with ID {book_id} not found.\n")
                 return False
             
-            # Proceed with returning
             book = self.books[book_id]
             member = self.members[member_id]
             
-            # Check if the book was borrowed by this member
             if book_id not in member.borrowed_books:
-                print(f"Error: Book '{book.book_title}' was not borrowed by {member.member_name}.")
+                print(f"\nError: Book '{book.book_title}' was not borrowed by {member.member_name}.\n")
                 return False
             
-            # Check if book is already available
             if book.is_available:
-                print(f"Error: Book '{book.book_title}' is already in the library.")
+                print(f"\nError: Book '{book.book_title}' is already in the library.\n")
                 return False
             
-            # Perform return
             member.return_book(book_id)
             book.return_book()
-            print(f"Book '{book.book_title}' returned successfully by {member.member_name}.")
+            print(f"\nBook '{book.book_title}' returned successfully by {member.member_name}.\n")
             return True
         
         except Exception as e:
-            print(f"Unexpected error while returning book: {e}")
+            print(f"\nUnexpected error while returning book: {e}\n")
             return False
     
     def display_all_books(self):
         """
         Display all books in the library with their details.
         """
-        print(f"Books in {self.name}:")
+        print(f"\nBooks in {self.name}:")
         if not self.books:
-            print("No books in the library.")
+            print("No books in the library.\n")
         else:
             for book in self.books.values():
                 book.display_details()
@@ -310,23 +301,24 @@ class Library:
         """
         Display all registered members.
         """
-        print(f"Members of {self.name}:")
+        print(f"\nMembers of {self.name}:")
         if not self.members:
-            print("No members registered.")
+            print("No members registered.\n")
         else:
             for member in self.members.values():
                 print(f"- {member.member_name} (ID: {member.member_id})")
+            print()
 
 
 def main():
     """
     Main program to interact with the IM Library Management System.
     """
-    # Create the library
     try:
         im_library = Library("IM Library")
+        print("\nIM Library Management System initialized successfully.\n")
     except ValueError as e:
-        print(f"Error creating library: {e}")
+        print(f"\nError creating library: {e}\n")
         return
     
     while True:
@@ -338,49 +330,66 @@ def main():
         print("5. Check Book Availability")
         print("6. List All Books")
         print("7. List All Members")
-        print("8. Exit")
+        print("8. Exit\n")
         
         try:
             choice = input("Enter your choice (1-8): ").strip()
             
+            if not choice:
+                print("\nError: Choice cannot be empty.\n")
+                continue
+            
             if not choice.isdigit():
-                print("Error: Please enter a number between 1 and 8.")
+                print("\nError: Please enter a number between 1 and 8.\n")
                 continue
             
             choice = int(choice)
             
             if choice < 1 or choice > 8:
-                print("Error: Please enter a number between 1 and 8.")
+                print("\nError: Please enter a number between 1 and 8.\n")
                 continue
             
             if choice == 1:
-                title = input("Enter book title: ").strip()
+                title = input("\nEnter book title: ").strip()
                 author = input("Enter book author: ").strip()
                 book_id = input("Enter unique book ID: ").strip()
-                im_library.add_book(title, author, book_id) 
+                if not all([title, author, book_id]):
+                    print("\nError: All fields must be non-empty.\n")
+                else:
+                    im_library.add_book(title, author, book_id)
                 
-            
             elif choice == 2:
-                name = input("Enter member name: ").strip()
+                name = input("\nEnter member name: ").strip()
                 member_id = input("Enter unique member ID: ").strip()
-                im_library.register_member(name, member_id)
+                if not all([name, member_id]):
+                    print("\nError: All fields must be non-empty.\n")
+                else:
+                    im_library.register_member(name, member_id)
             
             elif choice == 3:
-                member_id = input("Enter member ID: ").strip()
+                member_id = input("\nEnter member ID: ").strip()
                 book_id = input("Enter book ID to borrow: ").strip()
-                im_library.borrow_book(member_id, book_id)
+                if not all([member_id, book_id]):
+                    print("\nError: All fields must be non-empty.\n")
+                else:
+                    im_library.borrow_book(member_id, book_id)
             
             elif choice == 4:
-                member_id = input("Enter member ID: ").strip()
+                member_id = input("\nEnter member ID: ").strip()
                 book_id = input("Enter book ID to return: ").strip()
-                im_library.return_book(member_id, book_id)
+                if not all([member_id, book_id]):
+                    print("\nError: All fields must be non-empty.\n")
+                else:
+                    im_library.return_book(member_id, book_id)
             
             elif choice == 5:
-                book_id = input("Enter book ID to check availability: ").strip()
-                if book_id in im_library.books:
+                book_id = input("\nEnter book ID to check availability: ").strip()
+                if not book_id:
+                    print("\nError: Book ID cannot be empty.\n")
+                elif book_id in im_library.books:
                     im_library.books[book_id].display_details()
                 else:
-                    print(f"Error: Book with ID {book_id} not found in the library.")
+                    print(f"\nError: Book with ID {book_id} not found in the library.\n")
             
             elif choice == 6:
                 im_library.display_all_books()
@@ -389,13 +398,13 @@ def main():
                 im_library.display_all_members()
             
             elif choice == 8:
-                print("Thank you for using IM Library Management System. Goodbye!")
+                print("\nThank you for using IM Library Management System. Goodbye!\n")
                 break
         
         except ValueError:
-            print("Error: Invalid input. Please try again.")
+            print("\nError: Invalid input. Please try again.\n")
         except Exception as e:
-            print(f"An unexpected error occurred: {e}")
+            print(f"\nAn unexpected error occurred: {e}\n")
 
 
 if __name__ == "__main__":
