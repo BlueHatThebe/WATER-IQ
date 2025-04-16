@@ -2,7 +2,7 @@ class Student:
     def __init__(self, student_name, student_id):
         self.student_name = student_name
         self.student_id = student_id
-        self.courses = []  # List of tuples (course_name, grade)
+        self.courses = []  
 
     def enroll_course(self, course_name, grade):
         if not course_name or not grade:
@@ -25,13 +25,13 @@ class Student:
 
 class StudentManagementSystem:
     def __init__(self):
-        self.students = []  # List of student objects
+        self.students = []  
 
     def add_student(self, student_name, student_id):
         if not student_name or not student_id:
             print("Error: Student name and ID cannot be empty")
             return
-        # Check if student_id already exists
+         
         for student in self.students:
             if student.student_id == student_id:
                 print("Error: Student ID already exists")
