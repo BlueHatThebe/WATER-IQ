@@ -60,37 +60,28 @@ plt.show()
 # Function to predict soil moisture for new data
 def predict_soil_moisture(temperature, humidity, distance, hour=None):
     try:
-        print("Inside predict_soil_moisture")
         if hour is None:
             hour = datetime.datetime.now().hour
-        print(f"Input values: temp={temperature}, humidity={humidity}, distance={distance}, hour={hour}")
         temp_humidity_interaction = temperature * humidity
         new_data = pd.DataFrame({
             'temperature': [temperature],
-            'humidity': [humi
-dity],
+            'humidity': [humidity],  # Fixed typo from 'humi dity'
             'distance': [distance],
             'hour': [hour],
             'temp_humidity_interaction': [temp_humidity_interaction]
         })
-        print("New data created:", new_data)
         prediction = rf_model.predict(new_data)
-        print("Prediction made:", prediction)
         return prediction[0]
     except Exception as e:
         print(f"Error in prediction: {e}")
         return None
 
 # Example usage
-print("About to call predict_soil_moisture")
 new_temperature = 25.5
 new_humidity = 58.8
 new_distance = 9.5
-try:
-    predicted_soil_moisture = predict_soil_moisture(new_temperature, new_humidity, new_distance)
-    if predicted_soil_moisture is not None:
-        print(f"Predicted soil moisture for temp={new_temperature} C, humidity={new_humidity}%, distance={new_distance}cm: {predicted_soil_moisture}")
-    else:
-        print("Prediction failed.")
-except Exception as e:
-    print(f"Error in prediction call: {e}")
+predicted_soil_moisture = predict_soil_moisture(new_temperature, new_humidity, new_distance)
+if predicted_soil_moisture is not None:
+    print(f"Predicted soil moisture for temp={new_temperature} C, humidity={new_humidity}%, distance={new_distance}cm: {predicted_soil_moisture}")
+else:
+    print("Prediction failed.")
